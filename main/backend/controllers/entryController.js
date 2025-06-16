@@ -33,4 +33,5 @@ export async function getEntryByDate(req, res) {
   } catch (error) {
     res.status(500).json({ message: 'Error fetching entry', error });
   }
+  
 }
