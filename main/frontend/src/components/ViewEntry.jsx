@@ -1,38 +1,47 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import axios from "axios";
+import React, { useEffect, useState } from 'react';
+import {
+  Box,
+  Heading,
+  Text,
+  VStack,
+  Spinner,
+  Button
+} from '@chakra-ui/react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const ViewEntry = () => {
-  const { date } = useParams(); // gets the `date` from /view/:date
-  const [entry, setEntry] = useState(null);
-  const [error, setError] = useState("");
+  const [entries, setEntries] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchEntry = async () => {
-      try {
-        const res = await axios.get(`http://localhost:5000/api/v1/entries/${date}`);
-        setEntry(res.data);
-        setError("");
-      } catch (err) {
-        setEntry(null);
-        setError("No entries found");
-      }
-    };
+    async function fetchEntries() {
+      const response = await axios.get('http://localhost:5000/api/v1/entries/');
+      console.log('Response from backend:', response.data);
+      setEntries(response.data.reverse());
+      setLoading(false);
+    }
+    fetchEntries();
+  }, []);
 
-    fetchEntry();
-  }, [date]);
+  if (loading) return <Spinner size="xl" mt={10} />;
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>Journal Entry for {date}</h2>
-      {entry ? (
-        <div>
-          <p>{entry.content}</p>
-        </div>
-      ) : (
-        <p>{error}</p>
-      )}
-    </div>
+    <Box maxW="700px" mx="auto" mt={10} p={6}>
+      <Heading mb={6}>All Journal Entries</Heading>
+      <VStack align="start" spacing={6}>
+        {entries.map((entry) => (
+          <Box key={entry._id} p={4} borderWidth="1px" borderRadius="md" width="100%" bg="gray.50">
+            <Text fontWeight="bold">Date: {entry.date}</Text>
+            <Text mt={2}>{entry.content}</Text>
+          </Box>
+        ))}
+      </VStack>
+      <Button mt={6} onClick={() => navigate('/')}>
+        Back to Home
+      </Button>
+    </Box>
   );
 };
 

@@ -20,18 +20,11 @@ export async function createOrUpdateEntry(req, res) {
 }
 
 // Get entry by date
-export async function getEntryByDate(req, res) {
+export async function getAllEntries(req, res) {
   try {
-    const { date } = req.params;
-    const entry = await Entry.findOne({ date });
-
-    if (!entry) {
-      return res.status(404).json({ message: 'Entry not found' });
-    }
-
-    res.status(200).json(entry);
+    const entries = await Entry.find().sort({ _id: -1 }); // newest first
+    res.status(200).json(entries);
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching entry', error });
+    res.status(500).json({ message: 'Error fetching entries', error });
   }
-  
 }

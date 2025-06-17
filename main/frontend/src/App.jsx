@@ -7,7 +7,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<EntryForm />} />
-        <Route path="/view/:date" element={<ViewEntry />} />
+        <Route path="/view" element={<ViewEntry />} />
       </Routes>
     </Router>
   );
