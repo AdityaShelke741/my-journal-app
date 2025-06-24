@@ -4,42 +4,66 @@ import {
   Heading,
   Text,
   VStack,
+  Button,
   Spinner,
-  Button
+  useToast
 } from '@chakra-ui/react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import api from '../utils/api';
+import { logout } from '../utils/auth'; // import your utility function
 
 const ViewEntry = () => {
   const [entries, setEntries] = useState([]);
   const [loading, setLoading] = useState(true);
+  const toast = useToast();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    async function fetchEntries() {
-      const response = await axios.get('http://localhost:5000/api/v1/entries/');
-      console.log('Response from backend:', response.data);
-      setEntries(response.data.reverse());
+  const fetchEntries = async () => {
+    try {
+      const response = await api.get('/entries/');
+      const sortedEntries = response.data.reverse();
+      setEntries(sortedEntries);
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'Failed to fetch entries',
+        status: 'error',
+        duration: 3000
+      });
+    } finally {
       setLoading(false);
     }
+  };
+
+  const handleLogout = () => {
+    logout();               // remove token from localStorage
+    navigate('/login');     // redirect to login page
+  };
+
+  useEffect(() => {
     fetchEntries();
   }, []);
 
-  if (loading) return <Spinner size="xl" mt={10} />;
-
   return (
-    <Box maxW="700px" mx="auto" mt={10} p={6}>
-      <Heading mb={6}>All Journal Entries</Heading>
-      <VStack align="start" spacing={6}>
-        {entries.map((entry) => (
-          <Box key={entry._id} p={4} borderWidth="1px" borderRadius="md" width="100%" bg="gray.50">
-            <Text fontWeight="bold">Date: {entry.date}</Text>
-            <Text mt={2}>{entry.content}</Text>
-          </Box>
-        ))}
-      </VStack>
-      <Button mt={6} onClick={() => navigate('/')}>
-        Back to Home
+    <Box maxW="700px" mx="auto" mt="8" p="6">
+      <Heading size="lg" mb="6">Your Journal Entries</Heading>
+      {loading ? (
+        <Spinner />
+      ) : entries.length === 0 ? (
+        <Text>No entries found</Text>
+      ) : (
+        <VStack spacing={4} align="stretch">
+          {entries.map((entry) => (
+            <Box key={entry._id} p="4" borderWidth="1px" borderRadius="md" boxShadow="sm">
+              <Text fontWeight="bold">{entry.date}</Text>
+              <Text mt="2">{entry.content}</Text>
+            </Box>
+          ))}
+        </VStack>
+      )}
+      <Button mt="6" onClick={() => navigate('/')}>Back to Home</Button>
+      <Button colorScheme="red" onClick={handleLogout}>
+        Logout
       </Button>
     </Box>
   );

@@ -8,8 +8,9 @@ import {
   VStack,
   useToast
 } from '@chakra-ui/react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import api from '../utils/api'; // 👈 use the axios instance with token
+
 
 const EntryForm = () => {
   const [date, setDate] = useState('');
@@ -19,10 +20,7 @@ const EntryForm = () => {
 
   const handleSubmit = async () => {
     try {
-      await axios.post('http://localhost:5000/api/v1/entries/date', {
-        date,
-        content
-      });
+      await api.post('/entries/date', { date, content });
       toast({
         title: 'Entry saved!',
         status: 'success',
@@ -34,7 +32,7 @@ const EntryForm = () => {
     } catch (error) {
       toast({
         title: 'Error',
-        description: 'Failed to save entry',
+        description: error.response?.data?.message || 'Failed to save entry',
         status: 'error',
         duration: 3000,
         isClosable: true
