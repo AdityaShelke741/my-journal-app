@@ -1,33 +1,35 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import EntryForm from './components/EntryForm';
 import ViewEntry from './components/ViewEntry';
 import PrivateRoute from './components/PrivateRoute';
-import Login from './pages/Login';
-import Register from './pages/Register'; 
+import LandingPage from './pages/LandingPage'; // now the main home page
 
 function App() {
   return (
-  
     <Routes>
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      
-      <Route path="/" element={
-        <PrivateRoute>
-          <EntryForm />
-        </PrivateRoute>
-      } />
-      
-      <Route path="/view" element={
-        <PrivateRoute>
-          <ViewEntry />
-        </PrivateRoute>
-      } />
+      {/* Public Landing Page with Login + Register Forms embedded */}
+      <Route path="/" element={<LandingPage />} />
+
+      {/* Protected Routes */}
+      <Route
+        path="/journal"
+        element={
+          <PrivateRoute>
+            <EntryForm />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/view"
+        element={
+          <PrivateRoute>
+            <ViewEntry />
+          </PrivateRoute>
+        }
+      />
     </Routes>
-  
   );
 }
-
-
 
 export default App;
