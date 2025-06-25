@@ -1,10 +1,11 @@
 import express from 'express';
 import { createOrUpdateEntry, getAllEntries } from '../controllers/entryController.js';
-import { authenticateToken } from '../middleware/authMiddleware.js';
+import { verifyToken } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
-router.post('/date', authenticateToken, createOrUpdateEntry);
-router.get('/', authenticateToken, getAllEntries);
+router.post('/date', verifyToken, createOrUpdateEntry);
+router.get('/', verifyToken, getAllEntries);
+router.put('/:id', updateEntry);
 
 export default router;
