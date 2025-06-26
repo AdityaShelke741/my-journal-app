@@ -12,6 +12,8 @@ import {
 import { useNavigate } from 'react-router-dom';
 import api from '../utils/api';
 import { logout } from '../utils/auth'; // import your utility function
+import Navbar from './Navbar';
+
 
 const ViewEntry = () => {
   const [entries, setEntries] = useState([]);
@@ -92,77 +94,81 @@ const ViewEntry = () => {
     fetchEntries();
   }, []);
 
-  return (
-    <Box maxW="700px" mx="auto" mt="8" p="6">
-      <Heading size="lg" mb="6">Your Journal Entries</Heading>
-      {loading ? (
-        <Spinner />
-      ) : entries.length === 0 ? (
-        <Text>No entries found</Text>
-      ) : (
-        <VStack spacing={4} align="stretch">
-          {entries.map((entry) => (
-            <Box key={entry._id} p="4" borderWidth="1px" borderRadius="md" boxShadow="sm">
-              <Text fontWeight="bold">{entry.date}</Text>
+    return (
+    <Box>
+      <Navbar /> {/* ✅ Top navigation bar */}
 
-              {editingId === entry._id ? (
-                <>
-                  <Textarea
-                    value={updatedContent}
-                    onChange={(e) => setUpdatedContent(e.target.value)}
-                    mt="2"
-                  />
-                  <Button
-                    colorScheme="green"
-                    size="sm"
-                    mt="2"
-                    onClick={() => handleUpdate(entry._id)}
-                  >
-                    Save
-                  </Button>
-                  <Button
-                    size="sm"
-                    mt="2"
-                    ml="2"
-                    onClick={() => setEditingId(null)}
-                  >
-                    Cancel
-                  </Button>
-                </>
-              ) : (
-                <>
-                  <Text mt="2">{entry.content}</Text>
-                  <Button
-                    colorScheme="blue"
-                    size="sm"
-                    mt="2"
-                    onClick={() => {
-                      setEditingId(entry._id);
-                      setUpdatedContent(entry.content);
-                    }}
-                  >
-                    Edit
-                  </Button>
-                  <Button
-                    colorScheme="red"
-                    size="sm"
-                    mt="2"
-                    ml="2"
-                    onClick={() => handleDelete(entry._id)}
-                  >
-                    Delete
-                  </Button>
-                </>
-              )}
-            </Box>
-          ))}
+      <Box maxW="700px" mx="auto" mt="8" p="6">
+        <Heading size="lg" mb="6">Your Journal Entries</Heading>
+        {loading ? (
+          <Spinner />
+        ) : entries.length === 0 ? (
+          <Text>No entries found</Text>
+        ) : (
+          <VStack spacing={4} align="stretch">
+            {entries.map((entry) => (
+              <Box key={entry._id} p="4" borderWidth="1px" borderRadius="md" boxShadow="sm">
+                <Text fontWeight="bold">{entry.date}</Text>
 
-        </VStack>
-      )}
-      <Button mt="6" onClick={() => navigate('/')}>Back to Home</Button>
-      <Button colorScheme="red" onClick={handleLogout}>
-        Logout
-      </Button>
+                {editingId === entry._id ? (
+                  <>
+                    <Textarea
+                      value={updatedContent}
+                      onChange={(e) => setUpdatedContent(e.target.value)}
+                      mt="2"
+                    />
+                    <Button
+                      colorScheme="green"
+                      size="sm"
+                      mt="2"
+                      onClick={() => handleUpdate(entry._id)}
+                    >
+                      Save
+                    </Button>
+                    <Button
+                      size="sm"
+                      mt="2"
+                      ml="2"
+                      onClick={() => setEditingId(null)}
+                    >
+                      Cancel
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Text mt="2">{entry.content}</Text>
+                    <Button
+                      colorScheme="blue"
+                      size="sm"
+                      mt="2"
+                      onClick={() => {
+                        setEditingId(entry._id);
+                        setUpdatedContent(entry.content);
+                      }}
+                    >
+                      Edit
+                    </Button>
+                    <Button
+                      colorScheme="red"
+                      size="sm"
+                      mt="2"
+                      ml="2"
+                      onClick={() => handleDelete(entry._id)}
+                    >
+                      Delete
+                    </Button>
+                  </>
+                )}
+              </Box>
+            ))}
+          </VStack>
+        )}
+
+        <Button mt="6" onClick={() => navigate('/')}>Back to Home</Button>
+        <Button colorScheme="red" onClick={handleLogout}>
+          Logout
+        </Button>
+      </Box>
     </Box>
   );
 };

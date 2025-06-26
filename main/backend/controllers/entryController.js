@@ -26,7 +26,7 @@ export const createOrUpdateEntry = async (req, res) => {
 // Get entry by date
 export const getAllEntries = async (req, res) => {
   try {
-    const entries = await Entry.find({ user: req.user.id }).sort({ date: -1 }); // Most recent first
+    const entries = await Entry.find({ user: req.user }).sort({ date: -1 }); // Most recent first
     res.status(200).json(entries);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching entries', error });

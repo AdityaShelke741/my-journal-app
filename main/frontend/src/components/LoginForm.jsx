@@ -17,7 +17,7 @@ const LoginForm = () => {
       });
       localStorage.setItem('token', response.data.token);
       toast({ title: 'Logged in!', status: 'success', duration: 3000 });
-      navigate('/');
+      navigate('/journal');
     } catch (err) {
       toast({
         title: 'Login failed',

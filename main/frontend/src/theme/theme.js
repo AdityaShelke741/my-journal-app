@@ -3,9 +3,9 @@ import { extendTheme } from '@chakra-ui/react';
 
 const theme = extendTheme({
     fonts: {
-        heading: `'Monoton', cursive`,  // For headings
-        body: `'Cinzel Decorative', cursive`,     // For all body text
-    },
+        heading: 'inherit',
+        body: 'inherit',
+  },
     colors: {
         beige: {
         50: '#fdfaf4',
@@ -24,6 +24,42 @@ const theme = extendTheme({
         initialColorMode: 'light',
         useSystemColorMode: false,
     },
+    components: {
+    Button: {
+      baseStyle: {
+        fontWeight: 'medium',
+        borderRadius: 'md',
+        textTransform: 'uppercase',
+      },
+      sizes: {
+        md: {
+          fontSize: 'md',
+          px: 6,
+          py: 4,
+        },
+      },
+      variants: {
+        solid: {
+          bg: 'beige.500',
+          color: 'white',
+          _hover: {
+            bg: 'beige.600',
+          },
+        },
+        outline: {
+          borderColor: 'beige.500',
+          color: 'beige.500',
+          _hover: {
+            bg: 'beige.50',
+          },
+        },
+      },
+      defaultProps: {
+        size: 'md',
+        variant: 'solid',
+      },
+    },
+  },
 });
 
 export default theme;
